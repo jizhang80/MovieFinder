@@ -1,13 +1,13 @@
 const db = require('../config/connection');
-const { Profile } = require('../models');
-const moviesSeeds = require('./moviesSeeds.json');
+const { Movie } = require('../models');
+const movieSeeds = require('./movieSeeds.json');
 const cleanDB = require('./cleanDB');
 
 db.once('open', async () => {
   try {
-    await cleanDB('Profile', 'profiles');
+    await cleanDB('Movie', 'movies');
     
-    await Profile.create(profileSeeds);
+    await Movie.create(movieSeeds);
 
     console.log('all done!');
     process.exit(0);
