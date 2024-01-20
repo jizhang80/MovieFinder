@@ -1,33 +1,44 @@
-//sample code
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-/*
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import App from './App.jsx';
+import Home from './components/Home.jsx'; // Import the Home component
+import WatchList from './components/WatchList.jsx';
+import ButtonAppBar from './components/NavTabs.jsx';
 
-import App from './App.jsx'
-import Home from './pages/Home'
-import Profile from './pages/Profile'
-import Error from './pages/Error'
+
+const theme = createTheme({
+  palette: {
+    mode: 'light', 
+  },
+});
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
-    errorElement: <Error />,
+    element: (
+      <ThemeProvider theme={theme}>
+        <ButtonAppBar />
+        <Home /> 
+      </ThemeProvider>
+    ),
+    errorElement: <h1 className='display-2'>Wrong page!</h1>,
     children: [
       {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: '/profiles/:profileId',
-        element: <Profile />,
+        path: '/saved',
+        element: (
+          <ThemeProvider theme={theme}>
+            <WatchList />
+          </ThemeProvider>
+        ),
       },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
-)
-*/
+  <>
+    <RouterProvider router={router} />
+  </>
+);
