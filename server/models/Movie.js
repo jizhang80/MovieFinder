@@ -1,42 +1,47 @@
 const { Schema, model } = require('mongoose');
 
 const movieSchema = new Schema({
-  title: {
-    type: String,
+  id: {
+    type: Number,
     required: true,
     unique: true,
-    trim: true,
   },
-  year: {
+  imdb_id: {
     type: String,
   },
-  genre: [
-    {
+  release_date: {
+    type: String,
+  },
+  title: {
+    type: String,
+  },
+  genres: [{
+    id: {
+      type: Number,
+    },
+    name: {
       type: String,
-      trim: true,
-    }
-  ],
-  href: {
+    },
+  }],
+  original_language: {
     type: String,
   },
-  extract: {
+  homepage: {
     type: String,
-    trim: true,
   },
-  cast: [
-    {
-      type: String,
-      trim: true,
-    }
-  ],
-  thumbnail: {
+  overview: {
     type: String,
-    trim: true,
   },
-  thumbnail_width: {
+  popularity: {
     type: Number,
   },
-  thumbnail_height: {
+  poster_path: {
+    type: String,
+  },
+  vote_average: {
+    type: Number,
+  },
+  vote_count: {
     type: Number,
   },
 });

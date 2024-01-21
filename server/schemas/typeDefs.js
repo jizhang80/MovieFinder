@@ -1,16 +1,45 @@
 
 const typeDefs = `
+  type Genres {
+    _id: ID!
+    id: Int
+    name: String
+  }
+
   type Movie {
     _id: ID!
-    title: String!
-    year: String
-    genre: [String]
-    href: String
-    extract: String
-    cast: [String]
-    thumbnail: String
-    thumbnail_width: Int
-    thumbnail_height: Int
+    id: Int!
+    imdb_id: String!
+    release_date: String
+    title: String
+    genres: [Genres]
+    original_language: String
+    homepage: String
+    overview: String
+    popularity: Int
+    poster_path: String
+    vote_average: Float
+    vote_count: Int
+  }
+
+  input MovieData {
+    id: Int!
+    imdb_id: String!
+    release_date: String
+    title: String
+    genres: [Genres]
+    original_language: String
+    homepage: String
+    overview: String
+    popularity: Int
+    poster_path: String
+    vote_average: Float
+    vote_count: Int
+  }
+
+  type movieResponse {
+    success: Boolean
+    movie: Movie
   }
 
   type Query {
@@ -21,7 +50,7 @@ const typeDefs = `
 
   # Important for useMutation: We define our Mutation type to inform our entrypoints
   type Mutation {
-    addMovie(title: String!): Movie
+    addMovie(movie: MovieData): movieResponse
     removeMovie(_id: ID!): Movie
   }
 `;
