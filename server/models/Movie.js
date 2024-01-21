@@ -1,28 +1,13 @@
 const { Schema, model } = require('mongoose');
 
 const movieSchema = new Schema({
-  ImdbId: {
+  title: {
     type: String,
     required: true,
     unique: true,
     trim: true,
   },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  poster_url: {
-    type: String,
-    trim: true,
-  },
   year: {
-    type: String,
-  },
-  certificate: {
-    type: String,
-  },
-  runtime: {
     type: String,
   },
   genre: [
@@ -31,36 +16,29 @@ const movieSchema = new Schema({
       trim: true,
     }
   ],
-  ratingValue: {
+  href: {
     type: String,
   },
-  summary_text: {
+  extract: {
     type: String,
     trim: true,
   },
-  ratingCount: {
-    type: String,
-  },
-  director: {
-    name: {
-      type: String,
-      trim: true,
-    },
-    name_id : {
-      type: String,
-    },
-  },
   cast: [
     {
-      name: {
-        type: String,
-        trim: true,
-      },
-      name_id : {
-        type: String,
-      },
+      type: String,
+      trim: true,
     }
   ],
+  thumbnail: {
+    type: String,
+    trim: true,
+  },
+  thumbnail_width: {
+    type: Number,
+  },
+  thumbnail_height: {
+    type: Number,
+  },
 });
 
 const Movie = model('Movie', movieSchema);
