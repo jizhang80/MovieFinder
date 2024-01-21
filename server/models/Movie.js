@@ -1,51 +1,42 @@
-// TMDB movie details schema
 const { Schema, model } = require('mongoose');
 
 const movieSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
-  imdb_id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  release_date: {
-    type: String,
-  },
   title: {
     type: String,
     required: true,
+    unique: true,
+    trim: true,
   },
-  genres: [{
-    id: {
-      type: Number,
-    },
-    name: {
+  year: {
+    type: String,
+  },
+  genre: [
+    {
       type: String,
-    },
-  }],
-  original_language: {
+      trim: true,
+    }
+  ],
+  href: {
     type: String,
   },
-  homepage: {
+  extract: {
     type: String,
+    trim: true,
   },
-  overview: {
+  cast: [
+    {
+      type: String,
+      trim: true,
+    }
+  ],
+  thumbnail: {
     type: String,
+    trim: true,
   },
-  popularity: {
+  thumbnail_width: {
     type: Number,
   },
-  poster_path: {
-    type: String,
-  },
-  vote_average: {
-    type: Number,
-  },
-  vote_count: {
+  thumbnail_height: {
     type: Number,
   },
 });
