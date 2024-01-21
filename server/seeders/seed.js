@@ -1,6 +1,6 @@
 const db = require('../config/connection');
 const { Movie } = require('../models');
-const movieSeeds = require('./movieSeeds.json');
+const movieSeeds = require('./movies.json');
 const cleanDB = require('./cleanDB');
 
 db.once('open', async () => {
