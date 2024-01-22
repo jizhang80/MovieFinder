@@ -1,5 +1,9 @@
 const { Movie, User } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');  //A.G Added
+const searchMovies = require('../utils/searchMovies');
+const isMovieLocal = require('../utils/isMovieLocal');
+const getMovieDetailFromAPI = require('../utils/getMovieDetailFromAPI');
+const saveMovie = require('../utils/saveMovie');
 
 const resolvers = {
   Query:{
@@ -15,14 +19,24 @@ const resolvers = {
       return Movie.find();
     },
 
-    movie: async (parent, { movieId }) => {
-      return Movie.findOne({ _id: movieId });
+    movie: async (parent, { id }) => {
+      const idInt = Number(id);
+      const isLocal = await isMovieLocal(id);
+      if (isLocal) {
+        console.log(`return movie ID: ${id} from local DB`)
+        return Movie.findOne({ id: idInt });
+      } else {
+        // get data from API, save the movie data to local DB
+        const movie = await getMovieDetailFromAPI(id);
+        await saveMovie(movie);
+        console.log(`return movie ID: ${id} from API`)
+        return Movie.findOne({ id: idInt });
+      }
+      
     },
 
     searchMovies: async ( parent, { keyword }) => {
-      const regex = new RegExp(keyword, 'i'); // i for case-insensitive search
-      console.log(regex)
-      const movies = await Movie.find({ title: regex });
+      const movies = await searchMovies(keyword);
       return movies;
     },
   },

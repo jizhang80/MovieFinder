@@ -1,24 +1,39 @@
 
 const typeDefs = `
 
-type User {
-  _id: ID
-  username: String
-  email: String
-  password: String
-  movies: [Movie]!
-}
+  type Genres {
+    _id: ID!
+    id: Int
+    name: String
+  }
+
+  type User {
+    _id: ID
+    username: String
+    email: String
+    password: String
+    movies: [Movie]!
+  }
+
   type Movie {
     _id: ID!
-    title: String!
-    year: String
-    genre: [String]
-    href: String
-    extract: String
-    cast: [String]
-    thumbnail: String
-    thumbnail_width: Int
-    thumbnail_height: Int
+    id: Int!
+    imdb_id: String!
+    release_date: String
+    title: String
+    genres: [Genres]
+    original_language: String
+    homepage: String
+    overview: String
+    popularity: Float
+    poster_path: String
+    vote_average: Float
+    vote_count: Int
+  }
+
+  type movieResponse {
+    success: Boolean
+    movie: Movie
   }
 
   type Auth {
@@ -30,7 +45,7 @@ type User {
     users: [User]
     user(username: String): User 
     movies: [Movie]!
-    movie(_id: ID!): Movie
+    movie(id: String!): Movie
     searchMovies( keyword: String!): [Movie]
   }
 
@@ -38,7 +53,7 @@ type User {
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addMovie(title: String!): Movie
+    addMovie(id: Int!): Movie
     removeMovie(_id: ID!): Movie
   }
 `;
