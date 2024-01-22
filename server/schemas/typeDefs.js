@@ -1,10 +1,19 @@
 
 const typeDefs = `
-  type Genres {
+
+type Genres {
     _id: ID!
     id: Int
     name: String
   }
+
+type User {
+  _id: ID
+  username: String
+  email: String
+  password: String
+  movies: [Movie]!
+}
 
   type Movie {
     _id: ID!
@@ -42,7 +51,14 @@ const typeDefs = `
     movie: Movie
   }
 
+  type Auth {
+    token: ID!
+    user: User
+  }
+
   type Query {
+    users: [User]
+    user(username: String): User 
     movies: [Movie]!
     movie(_id: ID!): Movie
     searchMovies( keyword: String!): [Movie]
@@ -50,7 +66,9 @@ const typeDefs = `
 
   # Important for useMutation: We define our Mutation type to inform our entrypoints
   type Mutation {
-    addMovie(movie: MovieData): movieResponse
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    addMovie(title: String!): Movie
     removeMovie(_id: ID!): Movie
   }
 `;
