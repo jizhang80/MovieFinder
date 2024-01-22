@@ -19,7 +19,7 @@ const options = {
 };
 
 module.exports = async function getPopMovies() {
-  const movies = []; // final movies detail data
+  let movies = []; // final movies detail data
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   try {
     const movieIdsArray = await getPopMovieIds();

@@ -5,9 +5,11 @@ const movieSchema = new Schema({
     type: Number,
     required: true,
     unique: true,
+    index: true,
   },
   imdb_id: {
     type: String,
+    index: true,
   },
   release_date: {
     type: String,
