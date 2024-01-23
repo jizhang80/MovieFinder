@@ -1,29 +1,61 @@
-//sample code for tyepDefs
 
-/*
 const typeDefs = `
-  type Profile {
-    _id: ID
+
+  type Genres {
+    _id: ID!
+    id: Int
     name: String
-    skills: [String]!
   }
 
-  # Important for useQuery: We define our Query type to inform our entry points
-  # The Query type is built-in to GraphQL, so we only need to extend it to include which kinds of information we plan to request in our application
+  type User {
+    _id: ID
+    username: String
+    email: String
+    password: String
+    movies: [Movie]!
+  }
+
+  type Movie {
+    _id: ID!
+    id: Int!
+    imdb_id: String!
+    release_date: String
+    title: String
+    genres: [Genres]
+    original_language: String
+    homepage: String
+    overview: String
+    popularity: Float
+    poster_path: String
+    vote_average: Float
+    vote_count: Int
+  }
+
+  type movieResponse {
+    success: Boolean
+    movie: Movie
+  }
+
+  type Auth {
+    token: ID!
+    user: User
+  }
+
   type Query {
-    profiles: [Profile]!
-    # Important for Query Variables: The profile query field allows us to fetch the specific Profile data by using the profileId argument and providing a non-null ID value as the argument value
-    profile(profileId: ID!): Profile
+    users: [User]
+    user(username: String): User 
+    movies: [Movie]!
+    movie(id: String!): Movie
+    searchMovies( keyword: String!): [Movie]
   }
 
   # Important for useMutation: We define our Mutation type to inform our entrypoints
   type Mutation {
-    addProfile(name: String!): Profile
-    addSkill(profileId: ID!, skill: String!): Profile
-    removeProfile(profileId: ID!): Profile
-    removeSkill(profileId: ID!, skill: String!): Profile
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    addMovie(id: Int!): Movie
+    removeMovie(_id: ID!): Movie
   }
 `;
-*/
 
 module.exports = typeDefs;

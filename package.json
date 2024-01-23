@@ -19,12 +19,15 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.0"
-<<<<<<< Updated upstream
-=======
+
   },
   "dependencies": {
     "dotenv": "^16.3.2",
     "jwt-decode": "^4.0.0"
->>>>>>> Stashed changes
+
+  },
+  "dependencies": {
+    "dotenv": "^16.3.2"
+
   }
 }
