@@ -1,30 +1,13 @@
+// LoginForm.jsx
 import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import { Button, TextField, Alert } from '@mui/material';
-import { useMutation } from '@apollo/client';
-
-import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
+import Modal from './Modal';
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    maxWidth: '400px',
-    margin: 'auto',
-    padding: theme.spacing(2),
-  },
-  submitButton: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
-const LoginForm = () => {
-  const classes = useStyles();
-
+const LoginForm = ({ open, onClose }) => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
-  const [loginUser] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -42,15 +25,20 @@ const LoginForm = () => {
     }
 
     try {
-      const { data } = await loginUser({
-        variables: { ...userFormData },
-      });
+     
+      // const { data } = await loginUser({
+      //   variables: { ...userFormData },
+      // });
+
+      
+      const data = { login: { token: 'dummyToken', user: { username: 'dummyUser' } } };
 
       const loginUserData = data && data.login;
 
       if (loginUserData) {
         const { token, user } = loginUserData;
         Auth.login(token);
+        onClose(); 
       } else {
         console.error('loginUser mutation response does not contain loginUser:', data);
         setShowAlert(true);
@@ -64,9 +52,15 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <form className={classes.form} noValidate validated={validated} onSubmit={handleFormSubmit}>
-        <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='filled' severity='error'>
+    <Modal open={open} onClose={onClose}>
+      <form noValidate validated={validated} onSubmit={handleFormSubmit}>
+        <Alert
+          dismissible
+          onClose={() => setShowAlert(false)}
+          show={showAlert}
+          variant='filled'
+          severity='error'
+        >
           Something went wrong with your login credentials!
         </Alert>
 
@@ -95,15 +89,15 @@ const LoginForm = () => {
         />
 
         <Button
-          className={classes.submitButton}
           disabled={!(userFormData.email && userFormData.password)}
           type='submit'
           variant='contained'
-          color='primary'>
+          color='primary'
+        >
           Submit
         </Button>
       </form>
-    </>
+    </Modal>
   );
 };
 
