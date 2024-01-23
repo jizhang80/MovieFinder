@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Nav from './components/NavTabs';
 import Footer from './components/Footer';
@@ -37,7 +37,7 @@ const client = new ApolloClient({
 
 
 
-function App() {
+// function App() {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
 
@@ -56,21 +56,21 @@ function App() {
     setShowSignupForm(false);
   };
 
+const App = () => {
   return (
     <ApolloProvider client={client}>
       <Nav />
+     
       <main className="mx-3">
+        
         <Outlet />
+        
       </main>
       <Footer />
-
-      {/* Render Login Form Outside of Parent Components */}
-      {showLoginForm && <LoginForm onClose={closeForms} />}
-
-      {/* Render Signup Form Outside of Parent Components */}
-      {showSignupForm && <SignupForm onClose={closeForms} />}
-      </ApolloProvider>  
+      <LoginForm />
+      <SignupForm />
+    </ApolloProvider>
+    
   );
 }
 export default App;
-
