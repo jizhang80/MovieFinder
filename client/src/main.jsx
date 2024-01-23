@@ -2,15 +2,14 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import App from './App.jsx';
-import Home from './components/Home.jsx'; // Import the Home component
-import WatchList from './components/WatchList.jsx';
+import Home from './pages/Home.jsx';
+import WatchList from './pages/WatchList.jsx';
+import ModalsContainer from './components/ModalsContainer.jsx'; 
 import ButtonAppBar from './components/NavTabs.jsx';
-
 
 const theme = createTheme({
   palette: {
-    mode: 'light', 
+    mode: 'light',
   },
 });
 
@@ -20,25 +19,29 @@ const router = createBrowserRouter([
     element: (
       <ThemeProvider theme={theme}>
         <ButtonAppBar />
-        <Home /> 
+        <Home />
       </ThemeProvider>
     ),
-    errorElement: <h1 className='display-2'>Wrong page!</h1>,
-    children: [
-      {
-        path: '/saved',
-        element: (
-          <ThemeProvider theme={theme}>
-            <WatchList />
-          </ThemeProvider>
-        ),
-      },
-    ],
+    errorElement: <h1 className="display-2">Wrong page!</h1>,
+  },
+  {
+    path: '/saved',
+    element: (
+      <ThemeProvider theme={theme}>
+        <ButtonAppBar />
+        <WatchList />
+      </ThemeProvider>
+    ),
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+const modalRootElement = document.getElementById('modal-root');
+
+ReactDOM.createRoot(rootElement).render(
   <>
     <RouterProvider router={router} />
+    {/* Render modals container */}
+    <ModalsContainer rootElement={modalRootElement} />
   </>
 );

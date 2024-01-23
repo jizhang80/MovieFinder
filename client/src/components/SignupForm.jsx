@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/system';
 import { Button, TextField, Alert } from '@mui/material';
-import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
+import Modal from './Modal';
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    maxWidth: '400px',
-    margin: 'auto',
-    padding: theme.spacing(2),
-  },
-  submitButton: {
-    marginTop: theme.spacing(2),
-  },
-}));
+const StyledForm = styled('form')({
+  
+});
 
-const SignupForm = () => {
-  const classes = useStyles();
+const StyledTextField = styled(TextField)({
+ 
+});
 
+const StyledButton = styled(Button)({
+  
+});
+
+const SignupForm = ({ open, onClose }) => {
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
-  const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -41,77 +37,81 @@ const SignupForm = () => {
     }
 
     try {
-      const { data } = await addUser({
-        variables: { ...userFormData },
-      });
+      
+      // const { data } = await addUser({
+      //   variables: { ...userFormData },
+      // });
+
+      
+      const data = { addUser: { token: 'dummyToken', user: { username: 'dummyUser' } } };
 
       const { token, user } = data.addUser;
       Auth.login(token);
+      onClose(); 
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
 
-    setUserFormData({
-      username: '',
-      email: '',
-      password: '',
-    });
+    setUserFormData({ username: '', email: '', password: '' });
   };
 
   return (
-    <>
-      <form className={classes.form} noValidate validated={validated} onSubmit={handleFormSubmit}>
-        <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='filled' severity='error'>
+    <Modal open={open} onClose={onClose}>
+      <StyledForm noValidate validated={validated} onSubmit={handleFormSubmit}>
+        <Alert
+          dismissible
+          onClose={() => setShowAlert(false)}
+          show={showAlert}
+          variant='filled'
+          severity='error'
+        >
           Something went wrong with your signup!
         </Alert>
 
-        <TextField
+        <StyledTextField
           type='text'
           label='Username'
           name='username'
           variant='outlined'
           fullWidth
-          margin='normal'
           onChange={handleInputChange}
           value={userFormData.username}
           required
         />
 
-        <TextField
+        <StyledTextField
           type='email'
           label='Email'
           name='email'
           variant='outlined'
           fullWidth
-          margin='normal'
           onChange={handleInputChange}
           value={userFormData.email}
           required
         />
 
-        <TextField
+        <StyledTextField
           type='password'
           label='Password'
           name='password'
           variant='outlined'
           fullWidth
-          margin='normal'
           onChange={handleInputChange}
           value={userFormData.password}
           required
         />
 
-        <Button
-          className={classes.submitButton}
+        <StyledButton
           disabled={!(userFormData.username && userFormData.email && userFormData.password)}
           type='submit'
           variant='contained'
-          color='primary'>
+          color='primary'
+        >
           Submit
-        </Button>
-      </form>
-    </>
+        </StyledButton>
+      </StyledForm>
+    </Modal>
   );
 };
 
