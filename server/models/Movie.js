@@ -1,66 +1,51 @@
 const { Schema, model } = require('mongoose');
 
 const movieSchema = new Schema({
-  ImdbId: {
-    type: String,
+  id: {
+    type: Number,
     required: true,
     unique: true,
-    trim: true,
+    index: true,
   },
-  name: {
+  imdb_id: {
     type: String,
-    required: true,
-    trim: true,
+    index: true,
   },
-  poster_url: {
-    type: String,
-    trim: true,
-  },
-  year: {
+  release_date: {
     type: String,
   },
-  certificate: {
+  title: {
     type: String,
   },
-  runtime: {
-    type: String,
-  },
-  genre: [
-    {
-      type: String,
-      trim: true,
-    }
-  ],
-  ratingValue: {
-    type: String,
-  },
-  summary_text: {
-    type: String,
-    trim: true,
-  },
-  ratingCount: {
-    type: String,
-  },
-  director: {
+  genres: [{
+    id: {
+      type: Number,
+    },
     name: {
       type: String,
-      trim: true,
     },
-    name_id : {
-      type: String,
-    },
+  }],
+  original_language: {
+    type: String,
   },
-  cast: [
-    {
-      name: {
-        type: String,
-        trim: true,
-      },
-      name_id : {
-        type: String,
-      },
-    }
-  ],
+  homepage: {
+    type: String,
+  },
+  overview: {
+    type: String,
+  },
+  popularity: {
+    type: Number,
+  },
+  poster_path: {
+    type: String,
+  },
+  vote_average: {
+    type: Number,
+  },
+  vote_count: {
+    type: Number,
+  },
 });
 
 const Movie = model('Movie', movieSchema);

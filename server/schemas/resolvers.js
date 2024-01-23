@@ -1,49 +1,107 @@
-const { Profile } = require('../models');
+const { Movie, User } = require('../models');
+const { signToken, AuthenticationError } = require('../utils/auth');  //A.G Added
+const searchMovies = require('../utils/searchMovies');
+const isMovieLocal = require('../utils/isMovieLocal');
+const getMovieDetailFromAPI = require('../utils/getMovieDetailFromAPI');
+const saveMovie = require('../utils/saveMovie');
 
-// sample code for resovers
-/*
 const resolvers = {
-  // Important for useQuery: The resolver matches the typeDefs entry point and informs the request of the relevant data
-  Query: {
-    profiles: async () => {
-      return Profile.find();
+  Query:{
+
+    users: async () => {
+      return User.find().populate('movies'); //Added by A.G 
+    },
+    user: async (parent, { username }) => {
+      return User.findOne({ username }).populate('movies'); //Added by A.G to Populate movies of the user
     },
 
-    // Important for Query Variables: Each query resolver function can accept up to four parameters.
-    // The second parameter, commonly referred to as "args," represents the variable argument values passed with the query.
-    // It is always an object, and in this case, we are destructuring that object to retrieve the profileId value.
-    profile: async (parent, { profileId }) => {
-      return Profile.findOne({ _id: profileId });
+    movies: async () => {
+      return Movie.find();
+    },
+
+    movie: async (parent, { id }) => {
+      const idInt = Number(id);
+      const isLocal = await isMovieLocal(id);
+      if (isLocal) {
+        console.log(`return movie ID: ${id} from local DB`)
+        return Movie.findOne({ id: idInt });
+      } else {
+        // get data from API, save the movie data to local DB
+        const movie = await getMovieDetailFromAPI(id);
+        await saveMovie(movie);
+        console.log(`return movie ID: ${id} from API`)
+        return Movie.findOne({ id: idInt });
+      }
+      
+    },
+
+    searchMovies: async ( parent, { keyword }) => {
+      const movies = await searchMovies(keyword);
+      return movies;
     },
   },
-  // Important for useMutation: The resolver matches the typeDefs entry point and informs the request of the relevant data
+  
   Mutation: {
-    addProfile: async (parent, { name }) => {
-      return Profile.create({ name });
+
+    addUser: async (parent, { username, email, password }) => {
+      const user = await User.create({ username, email, password });
+      const token = signToken(user);
+      return { token, user };
     },
-    addSkill: async (parent, { profileId, skill }) => {
-      return Profile.findOneAndUpdate(
-        { _id: profileId },
-        {
-          $addToSet: { skills: skill },
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        throw AuthenticationError;
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw AuthenticationError;
+      }
+
+      const token = signToken(user);
+
+      return { token, user };
     },
-    removeProfile: async (parent, { profileId }) => {
-      return Profile.findOneAndDelete({ _id: profileId });
+
+
+    // addMovie: async (parent, { title }) => {
+    //   return Movie.create({ title });
+    // },
+
+    addMovie: async (parent, { title }, context) => {
+      if (context.user) {
+        const movie = Movie.create({ title });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { movies: movie._id } }
+        );
+
+        return movie;
+      }
+      throw new AuthenticationError('You need to be logged in!');
     },
-    removeSkill: async (parent, { profileId, skill }) => {
-      return Profile.findOneAndUpdate(
-        { _id: profileId },
-        { $pull: { skills: skill } },
-        { new: true }
-      );
+
+    // removeMovie: async (parent, { movieId }) => {
+    //   return Movie.findOneAndDelete({ _id: movieId });
+    // },
+
+    removeMovie: async (parent, { movieId }, context) => {
+      if (context.user){
+        const movie = Movie.findOneAndDelete({ _id: movieId });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { movies: movie._id } }
+        );
+        return movie;
+      }
+      throw new AuthenticationError('You need to be logged in!');    
     },
   },
 };
-*/
+
 module.exports = resolvers;
