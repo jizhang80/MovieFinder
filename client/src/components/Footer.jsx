@@ -11,8 +11,8 @@ const Footer = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '80px', // Set the desired height
-        backgroundColor: '#f5f5f5', // Set the desired background color
+        height: '80px', 
+        backgroundColor: '#f5f5f5', 
       }}
     >
       <img src={CompanyLogo} alt="Company Logo" style={{ height: '50px' }} />
