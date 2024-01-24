@@ -15,6 +15,7 @@ const App = () => {
         <Outlet />
         
       </main>
+      
       <Footer />
       <LoginForm />
       <SignupForm />
