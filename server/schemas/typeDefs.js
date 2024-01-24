@@ -12,7 +12,7 @@ const typeDefs = `
     username: String
     email: String
     password: String
-    movies: [Movie]!
+    favorite_movies: [Movie]!
   }
 
   type Movie {
@@ -55,6 +55,7 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
     addMovie(id: Int!): Movie
     removeMovie(_id: ID!): Movie
+    editMovie(_id: ID!): User
   }
 `;
 

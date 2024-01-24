@@ -8,6 +8,9 @@ import IconButton from '@mui/icons-material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import { EDIT_MOVIE } from '../utils/mutations';
+
+const [editMovie] = useMutation(EDIT_MOVIE);
 
 
 export default function MovieCard({movie}) {
@@ -29,7 +32,7 @@ export default function MovieCard({movie}) {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
+            <IconButton aria-label="add to favorites" onClick = {() => editMovie({variables: {movieId: movie.id}})}>
               <FavoriteIcon />
             </IconButton>
           </CardActions>

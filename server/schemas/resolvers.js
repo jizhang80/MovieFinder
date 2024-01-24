@@ -77,7 +77,7 @@ const resolvers = {
 
         await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { movies: movie._id } }
+          { $addToSet: { favorite_movies: movie._id } }
         );
 
         return movie;
@@ -95,9 +95,22 @@ const resolvers = {
 
         await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { movies: movie._id } }
+          { $pull: { favorite_movies: movie._id } }
         );
         return movie;
+      }
+      throw new AuthenticationError('You need to be logged in!');    
+    },
+
+    editMovie: async (parent, { movieId }, context) => {
+      if (context.user){
+        const user = User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { favorite_movies: movieId } }
+         
+        );
+           
+        return user;
       }
       throw new AuthenticationError('You need to be logged in!');    
     },
