@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
 
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -11,14 +12,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Typography from '@mui/material/Typography';
 
 import Stack from '@mui/material/Stack';
-import { Link } from 'react-router-dom';
 import { EDIT_MOVIE } from '../utils/mutations';
 
-const [editMovie] = useMutation(EDIT_MOVIE);
-
-
-
 export default function MovieCard({movie}) {
+  const [editMovie] = useMutation(EDIT_MOVIE);
   // about movie image, please ref: https://developer.themoviedb.org/docs/image-basics
   const imageUrl = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
   return (

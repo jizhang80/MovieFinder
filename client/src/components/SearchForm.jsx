@@ -16,7 +16,6 @@ export default function SearchForm() {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
-		console.log(keyword);
 		//open page Movie search results page, just pass the search keyword to that page
 		navigate(`/search/${keyword}`);
 	}
