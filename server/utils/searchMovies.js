@@ -1,5 +1,5 @@
-// searchMovie from TMDB API, display by page number
-// 
+// searchMovie from TMDB API
+
 require('dotenv').config()
 const fetch = require('node-fetch');
 const options = {

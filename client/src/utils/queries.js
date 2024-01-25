@@ -39,12 +39,15 @@ export const QUERY_SEARCHMOVIE = gql`
 
 // query movie detail
 export const QUERY_MOVIEDETAIL = gql`
-  query getMovieDetail($movieId: ID!) {
+  query getMovieDetail($movieId: String!) {
     movie(id: $movieId) {
       id
       imdb_id
       title
-      genres
+      genres {
+        id
+        name
+      }
       homepage
       overview
       poster_path
