@@ -5,11 +5,16 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Home from './pages/Home.jsx';
 import WatchList from './pages/WatchList.jsx';
 import ModalsContainer from './components/ModalsContainer.jsx'; 
+
 import Error from './pages/Error.jsx';
 import App from './App.jsx';
 import TempSearchPage from './pages/TempSearchPage.jsx';
 import MovieSearchResult from './pages/MovieSearchResult';
 import MovieDetail from './pages/MovieDetail.jsx';
+
+import ButtonAppBar from './components/NavTabs.jsx';
+import Footer from './components/Footer.jsx'; // Import the Footer component
+
 
 const theme = createTheme({
   palette: {
