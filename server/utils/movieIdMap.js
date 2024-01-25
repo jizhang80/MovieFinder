@@ -1,6 +1,6 @@
 // make a movie id map structure globally available
 const Movie = require('../models/Movie');
-const movieIdMap = new Map();
+const movieIdMap = new Map(); // O(1)
 
 async function initializeMovieIdMap() {
   try {

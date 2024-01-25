@@ -1,9 +1,12 @@
 import { useRouteError } from 'react-router-dom';
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
 export default function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
+  loadDevMessages();
+  loadErrorMessages();
   return (
     <div id="error-page">
       <h1>Oops!</h1>

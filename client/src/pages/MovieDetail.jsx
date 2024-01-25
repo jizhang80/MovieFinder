@@ -3,22 +3,22 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_MOVIEDETAIL } from '../utils/queries';
-import LoadingButton from '@mui/lab/LoadingButton';
 
-export default function MovieDetail(movieId) {
+export default function MovieDetail() {
 	//get movie data by GraphQL
 	const { movieId } = useParams();
-	
-	const { loading, data } = useQuery(QUERY_MOVIEDETAIL, {
+	const { loading, error, data } = useQuery(QUERY_MOVIEDETAIL, {
 		variables: {movieId: movieId}
 	});
 	
 	const movie = data?.movie || {};
+	console.log(movie)
 	
 	if (loading) {
-		<LoadingButton loading>
-    	</LoadingButton>
+		<p>Loading...</p>
 	}
+
+	if (error) console.log(JSON.stringify(error, null, 2));
 
 	const imageUrl = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
 
@@ -26,7 +26,7 @@ export default function MovieDetail(movieId) {
 	return (
 		<div>
 			<h1>{movie.title}</h1>
-			<image src={imageUrl} />
+			<img src={imageUrl} />
 		</div>
 	);
 };

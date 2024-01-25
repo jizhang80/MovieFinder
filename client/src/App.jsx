@@ -4,10 +4,16 @@ import Nav from './components/NavTabs';
 import Footer from './components/Footer';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache(),
+});
 
 const App = () => {
   return (
-    <>
+    <ApolloProvider client={client}>
       <Nav />
      
       <main className="mx-3">
@@ -18,7 +24,7 @@ const App = () => {
       <Footer />
       <LoginForm />
       <SignupForm />
-    </>
+    </ApolloProvider>
   );
 }
 
