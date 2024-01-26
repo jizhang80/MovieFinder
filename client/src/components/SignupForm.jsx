@@ -37,7 +37,7 @@ const SignupForm = ({ open, onClose }) => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   // Use the useMutation hook to execute the ADD_USER mutation
-  const [addUser, { error }] = useMutation(ADD_USER);
+  const [addUser, { error}] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -82,15 +82,15 @@ const SignupForm = ({ open, onClose }) => {
         <StyledTitle variant="h2">Create Account</StyledTitle>
 
         {showAlert && (
-          <Alert
-            dismissible
-            onClose={() => setShowAlert(false)}
-            variant='filled'
-            severity='error'
-          >
-            {showAlert}
-          </Alert>
-        )}
+  <Alert
+    dismissible="true"  
+    onClose={() => setShowAlert(false)}
+    variant='filled'
+    severity='error'
+  >
+    {showAlert}
+  </Alert>
+)}
 
         <StyledTextField
           type='text'
