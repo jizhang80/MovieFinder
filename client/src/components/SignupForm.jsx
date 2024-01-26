@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { Button, TextField, Alert } from '@mui/material';
+import { Button, TextField, Alert, Typography } from '@mui/material';
 import Auth from '../utils/auth';
 import Modal from './Modal';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 
 const StyledForm = styled('form')({
-  // Add your styles here
+  
 });
 
 const StyledTextField = styled(TextField)({
- 
+  
 });
 
 const StyledButton = styled(Button)({
@@ -21,6 +21,13 @@ const StyledButton = styled(Button)({
     backgroundColor: 'black',
     opacity: '0.5',
   },
+});
+
+const StyledTitle = styled(Typography)({
+  fontSize: '1.5rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  marginBottom: '20px',
 });
 
 const SignupForm = ({ open, onClose }) => {
@@ -72,6 +79,8 @@ const SignupForm = ({ open, onClose }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <StyledForm noValidate validated={validated} onSubmit={handleFormSubmit}>
+        <StyledTitle variant="h2">Create Account</StyledTitle>
+
         {showAlert && (
           <Alert
             dismissible

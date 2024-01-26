@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import { useNavigate } from 'react-router-dom';
+import Auth from '../utils/auth';
 
 import CompanyLogo from '../images/purpleturtle.png';
 
@@ -21,6 +22,13 @@ const ButtonAppBar = () => {
   const [loginFormOpen, setLoginFormOpen] = useState(false);
   const [signupFormOpen, setSignupFormOpen] = useState(false);
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is already logged in when the component mounts
+    const isLoggedIn = Auth.loggedIn();
+    setLoggedIn(isLoggedIn);
+  }, []);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -53,6 +61,11 @@ const ButtonAppBar = () => {
     setSignupFormOpen(false);
   };
 
+  const handleLogout = () => {
+    Auth.logout();
+    setLoggedIn(false);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="default">
@@ -72,12 +85,20 @@ const ButtonAppBar = () => {
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}></Typography>
 
-          <Button color="inherit" onClick={openLoginForm}>
-            Login
-          </Button>
-          <Button color="inherit" onClick={openSignupForm}>
-            Sign Up
-          </Button>
+          {loggedIn ? (
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
+          ) : (
+            <>
+              <Button color="inherit" onClick={openLoginForm}>
+                Login
+              </Button>
+              <Button color="inherit" onClick={openSignupForm}>
+                Sign Up
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
 
@@ -117,4 +138,3 @@ const ButtonAppBar = () => {
 };
 
 export default ButtonAppBar;
-
