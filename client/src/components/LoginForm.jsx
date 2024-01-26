@@ -83,15 +83,15 @@ const LoginForm = ({ open, onClose }) => {
         <StyledTitle variant="h2">Login</StyledTitle>
 
         {showAlert && (
-          <Alert
-            dismissible={!!true}
-            onClose={() => setShowAlert(false)}
-            variant='filled'
-            severity='error'
-          >
-            Something went wrong with your login credentials!
-          </Alert>
-        )}
+  <Alert
+    dismissible="true"  
+    onClose={() => setShowAlert(false)}
+    variant='filled'
+    severity='error'
+  >
+    Something went wrong with your login credentials!
+  </Alert>
+)}
 
         {error && (
           <Alert
