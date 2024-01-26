@@ -35,7 +35,11 @@ const Home = () => {
             <img src={CompanyLogo} alt="Company Logo" style={{ width: '60%', marginBottom: '10px' }} />
             <br />
             <Typography variant="body1" sx={{ textAlign: 'left' }}>
-              Here at purple turtle we understand time is of the essence. Why waste time searching for movies to watch when you can have them all in one place? We have a wide variety of movies to choose from. You can search for movies by title, genre, or even by actor. You can also add movies to your watchlist to save them for later. So what are you waiting for? Sign up today and start watching!
+            Welcome to Purple Turtle, where we value your time! Say goodbye to the hassle of searching for movies across multiple platforms. With our streamlined service, you can effortlessly discover where your desired movies are available for streaming, all in one place.
+
+We offer a diverse collection of movies, and our primary goal is to simplify your viewing experience. Instead of sifting through various streaming services, you can now search for movies by title and instantly find out where they are currently streaming. No more guessing or scrolling through endless lists.
+
+Additionally, you have the convenience of adding movies directly to your watchlist, creating a personalized library for your future viewing pleasures. It's time to enhance your movie-watching journey—sign up with Purple Turtle today and dive into seamless, efficient streaming!
             </Typography>
           </Box>
 

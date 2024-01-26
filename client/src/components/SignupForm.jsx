@@ -3,9 +3,11 @@ import { styled } from '@mui/system';
 import { Button, TextField, Alert } from '@mui/material';
 import Auth from '../utils/auth';
 import Modal from './Modal';
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
 
 const StyledForm = styled('form')({
-  
+  // Add your styles here
 });
 
 const StyledTextField = styled(TextField)({
@@ -13,13 +15,22 @@ const StyledTextField = styled(TextField)({
 });
 
 const StyledButton = styled(Button)({
-  
+  backgroundColor: 'black',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: 'black',
+    opacity: '0.5',
+  },
 });
 
 const SignupForm = ({ open, onClose }) => {
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Use the useMutation hook to execute the ADD_USER mutation
+  const [addUser, { error }] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -37,20 +48,22 @@ const SignupForm = ({ open, onClose }) => {
     }
 
     try {
-      
-      // const { data } = await addUser({
-      //   variables: { ...userFormData },
-      // });
-
-      
-      const data = { addUser: { token: 'dummyToken', user: { username: 'dummyUser' } } };
+      const { data } = await addUser({
+        variables: { ...userFormData },
+      });
 
       const { token, user } = data.addUser;
       Auth.login(token);
-      onClose(); 
+      onClose();
+      setShowSuccess(true); // Show success message
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
+
+      if (error?.message.includes('E11000 duplicate key error collection')) {
+        setShowAlert('User with the same credentials already exists.');
+      } else {
+        setShowAlert('Something went wrong with your signup!');
+      }
     }
 
     setUserFormData({ username: '', email: '', password: '' });
@@ -59,15 +72,16 @@ const SignupForm = ({ open, onClose }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <StyledForm noValidate validated={validated} onSubmit={handleFormSubmit}>
-        <Alert
-          dismissible
-          onClose={() => setShowAlert(false)}
-          show={showAlert}
-          variant='filled'
-          severity='error'
-        >
-          Something went wrong with your signup!
-        </Alert>
+        {showAlert && (
+          <Alert
+            dismissible
+            onClose={() => setShowAlert(false)}
+            variant='filled'
+            severity='error'
+          >
+            {showAlert}
+          </Alert>
+        )}
 
         <StyledTextField
           type='text'
@@ -106,10 +120,19 @@ const SignupForm = ({ open, onClose }) => {
           disabled={!(userFormData.username && userFormData.email && userFormData.password)}
           type='submit'
           variant='contained'
-          color='primary'
         >
           Submit
         </StyledButton>
+
+        {showSuccess && (
+          <Alert
+            severity="success"
+            onClose={() => setShowSuccess(false)}
+            sx={{ marginTop: '10px' }}
+          >
+            User created successfully! You can now log in with your credentials.
+          </Alert>
+        )}
       </StyledForm>
     </Modal>
   );

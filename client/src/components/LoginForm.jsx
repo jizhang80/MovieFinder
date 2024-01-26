@@ -1,13 +1,35 @@
-// LoginForm.jsx
 import React, { useState } from 'react';
-import { Button, TextField, Alert } from '@mui/material';
+import { Button, TextField, Alert, styled } from '@mui/material';
+
 import Auth from '../utils/auth';
 import Modal from './Modal';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
+
+const StyledForm = styled('form')({
+  // Your form styling here
+});
+
+const StyledTextField = styled(TextField)({
+  // Your text field styling here
+});
+
+const StyledButton = styled(Button)({
+  backgroundColor: 'black',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: 'black',
+    opacity: '0.5',
+  },
+});
 
 const LoginForm = ({ open, onClose }) => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const [loginUser, { error }] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -25,27 +47,24 @@ const LoginForm = ({ open, onClose }) => {
     }
 
     try {
-     
-      // const { data } = await loginUser({
-      //   variables: { ...userFormData },
-      // });
-
-      
-      const data = { login: { token: 'dummyToken', user: { username: 'dummyUser' } } };
+      const { data } = await loginUser({
+        variables: { ...userFormData },
+      });
 
       const loginUserData = data && data.login;
 
       if (loginUserData) {
         const { token, user } = loginUserData;
         Auth.login(token);
-        onClose(); 
+        onClose();
+        setShowSuccess(true); // Show success message
       } else {
         console.error('loginUser mutation response does not contain loginUser:', data);
-        setShowAlert(true);
+        setShowAlert(true); // Show error message
       }
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
+      setShowAlert(true); // Show error message
     }
 
     setUserFormData({ email: '', password: '' });
@@ -53,18 +72,41 @@ const LoginForm = ({ open, onClose }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <form noValidate validated={validated} onSubmit={handleFormSubmit}>
-        <Alert
-          dismissible
-          onClose={() => setShowAlert(false)}
-          show={showAlert}
-          variant='filled'
-          severity='error'
-        >
-          Something went wrong with your login credentials!
-        </Alert>
+      <StyledForm noValidate validated={validated} onSubmit={handleFormSubmit}>
+        {showAlert && (
+         <Alert
+         dismissible={!!true}
+         onClose={() => setShowAlert(false)}
+         variant='filled'
+         severity='error'
+       >
+         Something went wrong with your login credentials!
+       </Alert>
+       
+        )}
 
-        <TextField
+        {error && (
+          <Alert
+            dismissible
+            onClose={() => setShowAlert(false)}
+            variant='filled'
+            severity='error'
+          >
+            {error.message}
+          </Alert>
+        )}
+
+        {showSuccess && (
+          <Alert
+            severity="success"
+            onClose={() => setShowSuccess(false)}
+            sx={{ marginTop: '10px' }}
+          >
+            Logged in successfully!
+          </Alert>
+        )}
+
+        <StyledTextField
           type='text'
           label='Email'
           name='email'
@@ -76,7 +118,7 @@ const LoginForm = ({ open, onClose }) => {
           required
         />
 
-        <TextField
+        <StyledTextField
           type='password'
           label='Password'
           name='password'
@@ -88,15 +130,14 @@ const LoginForm = ({ open, onClose }) => {
           required
         />
 
-        <Button
+        <StyledButton
           disabled={!(userFormData.email && userFormData.password)}
           type='submit'
           variant='contained'
-          color='primary'
         >
           Submit
-        </Button>
-      </form>
+        </StyledButton>
+      </StyledForm>
     </Modal>
   );
 };
