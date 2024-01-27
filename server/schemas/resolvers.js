@@ -1,9 +1,10 @@
-const { Movie, User } = require('../models');
+const { Movie, User, Provider } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');  //A.G Added
 const searchMovies = require('../utils/searchMovies');
 const isMovieLocal = require('../utils/isMovieLocal');
 const getMovieDetailFromAPI = require('../utils/getMovieDetailFromAPI');
 const saveMovie = require('../utils/saveMovie');
+const getProvidersInfo = require('../utils/getProviderInfo');
 
 const resolvers = {
   Query:{
@@ -22,16 +23,20 @@ const resolvers = {
     movie: async (parent, { id }) => {
       const idInt = Number(id);
       const isLocal = await isMovieLocal(id);
+      let movie = {};
       if (isLocal) {
         console.log(`return movie ID: ${id} from local DB`)
-        return Movie.findOne({ id: idInt });
+        movie = await Movie.findOne({ id: idInt });
       } else {
         // get data from API, save the movie data to local DB
-        const movie = await getMovieDetailFromAPI(id);
-        await saveMovie(movie);
+        const m = await getMovieDetailFromAPI(id);
+        await saveMovie(m);
         console.log(`return movie ID: ${id} from API`)
-        return Movie.findOne({ id: idInt });
+        movie = await Movie.findOne({ id: idInt });
       }
+      console.log(movie)
+      const providers = await getProvidersInfo(movie.id);
+      return {...movie._doc, providers};
       
     },
 
@@ -39,6 +44,14 @@ const resolvers = {
       const movies = await searchMovies(keyword);
       return movies;
     },
+
+    providers: async () => {
+      return Provider.find();
+    },
+
+    provider: async (parent, {providerId}) => {
+      return Provider.findOne({provider_id: providerId});
+    }
   },
   
   Mutation: {

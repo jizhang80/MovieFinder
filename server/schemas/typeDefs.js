@@ -29,6 +29,14 @@ const typeDefs = `
     poster_path: String
     vote_average: Float
     vote_count: Int
+    providers: [Provider]
+  }
+
+  type Provider {
+    _id: ID!
+    provider_id: String!
+    provider_name: String!
+    logo_path: String!
   }
 
   type movieResponse {
@@ -47,6 +55,8 @@ const typeDefs = `
     movies: [Movie]!
     movie(id: String!): Movie
     searchMovies( keyword: String!): [Movie]
+    providers: [Provider]
+    provider(providerId: String!): Provider
   }
 
   # Important for useMutation: We define our Mutation type to inform our entrypoints
