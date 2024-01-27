@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, TextField, Alert, styled } from '@mui/material';
+import { Button, TextField, Alert, Typography, styled } from '@mui/material';
 
 import Auth from '../utils/auth';
 import Modal from './Modal';
@@ -7,11 +7,11 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 
 const StyledForm = styled('form')({
-  // Your form styling here
+  
 });
 
 const StyledTextField = styled(TextField)({
-  // Your text field styling here
+  
 });
 
 const StyledButton = styled(Button)({
@@ -21,6 +21,13 @@ const StyledButton = styled(Button)({
     backgroundColor: 'black',
     opacity: '0.5',
   },
+});
+
+const StyledTitle = styled(Typography)({
+  fontSize: '1.5rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  marginBottom: '20px',
 });
 
 const LoginForm = ({ open, onClose }) => {
@@ -73,17 +80,18 @@ const LoginForm = ({ open, onClose }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <StyledForm noValidate validated={validated} onSubmit={handleFormSubmit}>
+        <StyledTitle variant="h2">Login</StyledTitle>
+
         {showAlert && (
-         <Alert
-         dismissible={!!true}
-         onClose={() => setShowAlert(false)}
-         variant='filled'
-         severity='error'
-       >
-         Something went wrong with your login credentials!
-       </Alert>
-       
-        )}
+  <Alert
+    dismissible="true"  
+    onClose={() => setShowAlert(false)}
+    variant='filled'
+    severity='error'
+  >
+    Something went wrong with your login credentials!
+  </Alert>
+)}
 
         {error && (
           <Alert
