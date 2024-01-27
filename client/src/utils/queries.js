@@ -52,6 +52,11 @@ export const QUERY_MOVIEDETAIL = gql`
       overview
       poster_path
       vote_average
+      providers {
+        logo_path
+        provider_id
+        provider_name
+      }
     }
   }
 `;
