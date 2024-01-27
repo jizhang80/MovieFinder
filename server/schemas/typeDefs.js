@@ -12,7 +12,7 @@ const typeDefs = `
     username: String
     email: String
     password: String
-    favorite_movies: [Movie]!
+    favorite_movies: [Movie]
   }
 
   type Movie {
@@ -41,6 +41,7 @@ const typeDefs = `
 
   type movieResponse {
     success: Boolean
+    message: String
     movie: Movie
   }
 
@@ -65,7 +66,8 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
     addMovie(id: Int!): Movie
     removeMovie(_id: ID!): Movie
-    editMovie(_id: ID!): User
+    addFavMovie(id: String!): movieResponse
+    removeFavMovie(id: String!): movieResponse
   }
 `;
 
