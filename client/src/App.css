@@ -37,3 +37,8 @@ h6 {
     font-size: 14px;
   }
 }
+
+.main-content {
+  margin-top: 20px; 
+  margin-bottom: 20px; 
+}
