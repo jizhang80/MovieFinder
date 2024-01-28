@@ -7,16 +7,12 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '80px',
+        height: '20px', 
         backgroundColor: '#f5f5f5',
-        padding: '20px', // Add padding to create separation
-        boxSizing: 'border-box', // Include padding in the total height
+        padding: '20px 0',
       }}
     >
       <img src={CompanyLogo} alt="Company Logo" style={{ height: '40px' }} />

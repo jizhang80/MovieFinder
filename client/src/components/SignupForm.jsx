@@ -7,11 +7,11 @@ import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 
 const StyledForm = styled('form')({
-  
+  // Your styling here
 });
 
 const StyledTextField = styled(TextField)({
-  
+  // Your styling here
 });
 
 const StyledButton = styled(Button)({
@@ -37,60 +37,67 @@ const SignupForm = ({ open, onClose }) => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   // Use the useMutation hook to execute the ADD_USER mutation
-  const [addUser, { error}] = useMutation(ADD_USER);
+  const [addUser, { error }] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setValidated(true);
-
+  
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.stopPropagation();
       return;
     }
-
+  
     try {
       const { data } = await addUser({
         variables: { ...userFormData },
       });
-
+  
       const { token, user } = data.addUser;
       Auth.login(token);
       onClose();
       setShowSuccess(true); // Show success message
     } catch (err) {
       console.error(err);
-
-      if (error?.message.includes('E11000 duplicate key error collection')) {
-        setShowAlert('User with the same credentials already exists.');
+  
+      const graphQLErrors = err.graphQLErrors || [];
+      console.log('GraphQL errors:', graphQLErrors); // Log the entire error object
+  
+      const errorMessages = graphQLErrors.map(error => error.message);
+  
+      if (errorMessages.includes('User with the provided email already exists.')) {
+        setShowAlert('User with the same email already exists.');
+      } else if (errorMessages.some(message => message.toLowerCase().includes('password'))) {
+        setShowAlert('Password must be at least 6 characters long.');
       } else {
         setShowAlert('Something went wrong with your signup!');
       }
     }
-
+  
     setUserFormData({ username: '', email: '', password: '' });
   };
-
+  
+  
   return (
     <Modal open={open} onClose={onClose}>
       <StyledForm noValidate validated={validated} onSubmit={handleFormSubmit}>
         <StyledTitle variant="h2">Create Account</StyledTitle>
 
         {showAlert && (
-  <Alert
-    dismissible="true"  
-    onClose={() => setShowAlert(false)}
-    variant='filled'
-    severity='error'
-  >
-    {showAlert}
-  </Alert>
-)}
+          <Alert
+            dismissible="true"
+            onClose={() => setShowAlert(false)}
+            variant='filled'
+            severity='error'
+          >
+            {showAlert}
+          </Alert>
+        )}
 
         <StyledTextField
           type='text'
