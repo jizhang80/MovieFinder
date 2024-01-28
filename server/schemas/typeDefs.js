@@ -52,7 +52,7 @@ const typeDefs = `
 
   type Query {
     users: [User]
-    user(username: String): User 
+    user(userId: String!): User 
     movies: [Movie]!
     movie(id: String!): Movie
     searchMovies( keyword: String!): [Movie]
@@ -66,8 +66,8 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
     addMovie(id: Int!): Movie
     removeMovie(_id: ID!): Movie
-    addFavMovie(id: String!): movieResponse
-    removeFavMovie(id: String!): movieResponse
+    addFavMovie(id: String!): User
+    removeFavMovie(id: String!): User
   }
 `;
 

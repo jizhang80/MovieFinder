@@ -27,11 +27,32 @@ export const LOGIN_USER = gql`
   }
 `;
 
-export const EDIT_MOVIE = gql`
-  mutation EditMovie($movieId: ID!) {
-    editMovie(movieId: $movieId) {
-      _id
-      favorite_movies
+export const ADD_FAV_MOVIE = gql`
+  mutation addFavMovie($movieId: String!) {
+    addFavMovie(id: $movieId) {
+        _id
+        username
+        email
+        favorite_movies {
+          _id
+          id
+          title
+        }
+    }
+  }
+`;
+
+export const REMOVE_FAV_MOVIE = gql`
+  mutation removeFavMovie($movieId: String!) {
+    removeFavMovie(id: $movieId) {
+        _id
+        username
+        email
+        favorite_movies {
+          _id
+          id
+          title
+        }
     }
   }
 `;

@@ -1,5 +1,5 @@
 // using this package to decode the token and get the user's information out of it
-import * as jwtDecode from 'jwt-decode';
+import decode from 'jwt-decode';
 
 
 // creating a new class AuthService
@@ -23,7 +23,7 @@ class AuthService {
   // check if token is expired
   isTokenExpired(token) {
     try {
-        const decodedToken = jwtDecode(token);
+        const decoded = decode(token);
       if (decoded.exp < Date.now() / 1000) {
         return true;
       } else return false;

@@ -12,8 +12,8 @@ const resolvers = {
     users: async () => {
       return User.find();
     },
-    user: async (parent, { username }) => {
-      return User.findOne({ username });
+    user: async (parent, { userId }) => {
+      return User.findById(userId);
     },
     movies: async () => {
       return Movie.find();
@@ -131,7 +131,6 @@ const resolvers = {
       if (context.user) {
         const idInt = Number(id);
         const isLocal = await isMovieLocal(id);
-
         let movie = {};
         if (isLocal) {
           console.log(`return movie ID: ${id} from local DB`)

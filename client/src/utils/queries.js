@@ -6,17 +6,21 @@ export const QUERY_USERS = gql`
     users {
       _id
       name
-      
+      email
+      password
+      favorite_movies
     }
   }
 `;
 
 export const QUERY_SINGLE_USER = gql`
-  query singleUser($profileId: ID!) {
-    profile(userId: $userId) {
+  query singleUser($userId: ID!) {
+    user(userId: $userId) {
       _id
       name
-     
+      email
+      password
+      favorite_movies
     }
   }
 `;
