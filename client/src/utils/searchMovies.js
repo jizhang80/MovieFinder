@@ -3,13 +3,12 @@ const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2UzOGQ1YWRhYTk3ZmE3NjZhNTdhYjIxODU1MTlhYiIsInN1YiI6IjY1MDhmMzdkOGE4OGIyMDExZGIyZTU2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0DTCFcXGEMNIaRBmzqu6Xt519jEtXPfXFURIRlK1N_g`
   }
 };
 
 
 export default async function searchMovie(keywords) {
-	console.log(import.meta.env.VITE_TMDB_TOKEN)
 	let movies = [];
 	const url = `https://api.themoviedb.org/3/search/movie?query=${keywords}&include_adult=false&language=en-US&page=1&region=CA`;
 	try {
