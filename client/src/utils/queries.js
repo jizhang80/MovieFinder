@@ -1,5 +1,22 @@
 import { gql } from '@apollo/client';
 
+const MovieFragment = gql`
+  fragment MovieDetails on Movie {
+    _id
+    id
+    imdb_id
+    title
+    genres {
+      _id
+      id
+      name
+    }
+    homepage
+    overview
+    poster_path
+    vote_average
+  }
+`;
 
 export const QUERY_USERS = gql`
   query allUsers {
@@ -8,16 +25,19 @@ export const QUERY_USERS = gql`
       name
       email
       password
-      favorite_movies
+      favorite_movies {
+        ...MovieDetails
+      }
     }
   }
+  ${MovieFragment}
 `;
 
 export const QUERY_SINGLE_USER = gql`
-  query singleUser($userId: ID!) {
+  query singleUser($userId: String!) {
     user(userId: $userId) {
       _id
-      name
+      username
       email
       password
       favorite_movies
@@ -25,20 +45,19 @@ export const QUERY_SINGLE_USER = gql`
   }
 `;
 
-// search movie
-export const QUERY_SEARCHMOVIE = gql`
-  query getSearchResult($keyword: String!) {
-    searchMovies (keyword: $keyword) {
-      id
-      imdb_id
-      title
-      genres
-      homepage
-      overview
-      poster_path
-      vote_average
+export const QUERY_FAV_MOVIES = gql`
+  query favMovies {
+    favMovies
+  }
+`;
+
+export const QUERY_FAV_MOVIES_DETAIL = gql`
+  query favMoviesDetail {
+    favMoviesDetail {
+      ...MovieDetails
     }
   }
+  ${MovieFragment}
 `;
 
 // query movie detail

@@ -19,12 +19,9 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  favorite_movies: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Movie',
-    },
-  ],
+  favorite_movies: [{
+      type: String,
+  }],
 });
 
 userSchema.pre('save', async function (next) {

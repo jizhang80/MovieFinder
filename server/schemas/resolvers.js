@@ -1,7 +1,6 @@
 
 const { Movie, User, Provider } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');  //A.G Added
-const searchMovies = require('../utils/searchMovies');
 const isMovieLocal = require('../utils/isMovieLocal');
 const getMovieDetailFromAPI = require('../utils/getMovieDetailFromAPI');
 const saveMovie = require('../utils/saveMovie');
@@ -13,33 +12,51 @@ const resolvers = {
       return User.find();
     },
     user: async (parent, { userId }) => {
-      return User.findById(userId);
+      const userData = await User.findById(userId);
+      return userData;
     },
     movies: async () => {
       return Movie.find();
     },
     movie: async (parent, { id }) => {
-      const idInt = Number(id);
       const isLocal = await isMovieLocal(id);
 
       let movie = {};
       if (isLocal) {
         console.log(`return movie ID: ${id} from local DB`)
-        movie = await Movie.findOne({ id: idInt });
+        movie = await Movie.findOne({ id: id });
       } else {
         // get data from API, save the movie data to local DB
         const m = await getMovieDetailFromAPI(id);
         await saveMovie(m);
         console.log(`return movie ID: ${id} from API`)
-        movie = await Movie.findOne({ id: idInt });
+        movie = await Movie.findOne({ id: id });
       }
 
       const providers = await getProvidersInfo(movie.id);
       return {...movie._doc, providers};
     },
-    searchMovies: async (parent, { keyword }) => {
-      const movies = await searchMovies(keyword);
-      return movies;
+    favMovies: async (parent, _, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        return user.favorite_movies
+      } else {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+    },
+
+    favMoviesDetail: async (parent, _, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        let movies = [];
+        for (let movieId of user.favorite_movies) {
+          const movie = await Movie.findOne({id: movieId});
+          movies.push(movie);
+        }
+        return movies;
+      } else {
+        throw new AuthenticationError('You need to be logged in!');
+      }
     },
 
     providers: async () => {
@@ -129,30 +146,31 @@ const resolvers = {
       // add movie obj to user favorite_movies
       // first check if movie data in local DB or need get from API
       if (context.user) {
-        const idInt = Number(id);
         const isLocal = await isMovieLocal(id);
         let movie = {};
         if (isLocal) {
           console.log(`return movie ID: ${id} from local DB`)
-          movie = await Movie.findOne({ id: idInt });
         } else {
           // get data from API, save the movie data to local DB
           const m = await getMovieDetailFromAPI(id);
-          await saveMovie(m);
+          const isLocal = await isMovieLocal(id);
+          if (!isLocal) {
+            await saveMovie(m);
+          }
           console.log(`return movie ID: ${id} from API`)
-          movie = await Movie.findOne({ id: idInt });
         }
 
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { favorite_movies: movie } },
+          { $addToSet: { favorite_movies: id } },
           { new: true }
         );
 
         return {
           sucess: true, 
           message: "sucess add movie to fav",
-          movie: movie}
+          user: user,
+          movieId: id}
 
       } else {
         throw new AuthenticationError('You need to be logged in!');
@@ -161,18 +179,17 @@ const resolvers = {
 
     removeFavMovie: async (parent, { id }, context) => {
       if (context.user){
-        const idInt = Number(id);
         const updateUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { favorite_movies: {id: idInt } } },
+          { $pull: { favorite_movies: id  } },
           { new: true}
         );
 
         return {
           sucess: true, 
-          message: "sucess remove movie from fav",
-          value,movie: movie
-        } 
+          message: "sucess add movie to fav",
+          user: updateUser,
+          movieId: id} 
       } else {
         throw new AuthenticationError('You need to be logged in!');
       }

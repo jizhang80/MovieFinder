@@ -36,6 +36,7 @@ export default function SearchForm() {
 			<Button
 				variant="contained"
 				color="primary"
+				type='submit'
 				style={{
 					backgroundColor: 'black',
 					color: 'white',

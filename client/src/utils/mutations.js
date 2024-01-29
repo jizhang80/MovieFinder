@@ -27,17 +27,36 @@ export const LOGIN_USER = gql`
   }
 `;
 
+const MovieFragment = gql`
+  fragment MovieDetails on Movie {
+    _id
+    id
+    imdb_id
+    title
+    genres {
+      _id
+      id
+      name
+    }
+    homepage
+    overview
+    poster_path
+    vote_average
+  }
+`;
+
 export const ADD_FAV_MOVIE = gql`
   mutation addFavMovie($movieId: String!) {
     addFavMovie(id: $movieId) {
-        _id
-        username
-        email
-        favorite_movies {
+        success
+        message
+        user {
           _id
-          id
-          title
+          username
+          email
+          favorite_movies
         }
+        movieId
     }
   }
 `;
@@ -45,14 +64,15 @@ export const ADD_FAV_MOVIE = gql`
 export const REMOVE_FAV_MOVIE = gql`
   mutation removeFavMovie($movieId: String!) {
     removeFavMovie(id: $movieId) {
-        _id
-        username
-        email
-        favorite_movies {
+        success
+        message
+        user {
           _id
-          id
-          title
+          username
+          email
+          favorite_movies
         }
+        movieId
     }
   }
 `;

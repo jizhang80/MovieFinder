@@ -14,8 +14,8 @@ class AuthService {
     const token = this.getToken();
     const isTokenValid = !!token && !this.isTokenExpired(token);
   
-    console.log('Token:', token);
-    console.log('Is Token Valid:', isTokenValid);
+    // console.log('Token:', token); 
+    // console.log('Is Token Valid:', isTokenValid);
   
     return isTokenValid;
   }

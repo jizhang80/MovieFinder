@@ -1,4 +1,5 @@
 require('dotenv').config()
+const convertMovieIdToStr = require('../../utils/convertMovieIdToStr');
 /*
 get pop 100 movies from TMDB API
 call TMDB Polular API, 1 page per one call, 20 results per page, we need to call 5 pages, total 100 movies
@@ -33,7 +34,8 @@ module.exports = async function getPopMovies() {
         await delay(250);
 
         const movieDetail = await response.json();
-        movies.push(movieDetail);
+        const moviesConverted = convertMovieIdToStr(movieDetail)
+        movies.push(moviesConverted);
       } catch (error) {
         console.error('Error fetching movie details:', error);
         // Handle the error as needed
