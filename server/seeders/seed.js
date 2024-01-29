@@ -9,6 +9,7 @@ db.once('open', async () => {
     await cleanDB('Movie', 'movies');
     await cleanDB('User', 'users');
     await cleanDB('Provider', 'providers');
+    console.log("DB cleaned");
 
     console.log('Total 100 movies are pulling from TMDB API, 40 movies per 10 seconds ...');
     const movieSeeds = await getPopMovies();
