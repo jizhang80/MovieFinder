@@ -15,16 +15,20 @@ export default async function searchMovie(keywords) {
 	try {
 		const response = await fetch(url, options);
 		const searchResults = await response.json();
-		
-		if (!searchResults) return movies;
-		for (let m of searchResults.results) {
-			const idStr = m.id.toString();
-			const movie = {
-				...m,
-				id: idStr
+		console.log(response)
+		if (response.ok){
+			for (let m of searchResults.results) {
+				const idStr = m.id.toString();
+				const movie = {
+					...m,
+					id: idStr
+				}
+				movies.push(movie);
 			}
-			movies.push(movie);
+		} else {
+			console.log("fetch error: ",response);
 		}
+		
 
 		// let total_pages = searchResults.total_pages;
 		// if (searchResults.total_pages > 5) {
