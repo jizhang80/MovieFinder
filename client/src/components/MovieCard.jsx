@@ -10,6 +10,7 @@ import { IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Auth from '../utils/auth';
 
 import { useFavoriteMovies } from '../utils/FavoriteMoviesContext';
 
@@ -24,15 +25,20 @@ export default function MovieCard({movie}) {
   }, [movie, isFav]);
 
   const toggleFav = async () => {
-    if (isFav(movie)) {
-      console.log("remove")
-      const success = await removeFavoriteMovie(movie);
-      if (success) setfavBtnColor('');
+    if (Auth.loggedIn()) {
+      if (isFav(movie)) {
+        console.log("remove")
+        const success = await removeFavoriteMovie(movie);
+        if (success) setfavBtnColor('');
+      } else {
+        console.log("add")
+        const success = await addFavoriteMovie(movie);
+        if (success) setfavBtnColor('#98002e');
+      }
     } else {
-      console.log("add")
-      const success = await addFavoriteMovie(movie);
-      if (success) setfavBtnColor('#98002e');
+      alert("login first!");
     }
+    
   };
 
   return (

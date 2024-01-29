@@ -76,7 +76,7 @@ export default function FavoriteMoviesProvider ({ children }) {
             query: QUERY_FAV_MOVIES_DETAIL,
             data: updatedData,
           });
-          console.log("Before writeQuery:", updatedData);
+          console.log("After writeQuery:", updatedData);
         },
       });
       return true;

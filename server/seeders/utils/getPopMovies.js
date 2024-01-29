@@ -35,7 +35,12 @@ module.exports = async function getPopMovies() {
 
         const movieDetail = await response.json();
         const moviesConverted = convertMovieIdToStr(movieDetail)
-        movies.push(moviesConverted);
+        if (movies.some((movie)=> movie.id === moviesConverted.id )) {
+          console.log("duplicated index, ignore the data")
+          continue;
+        } else {
+          movies.push(moviesConverted);
+        }
       } catch (error) {
         console.error('Error fetching movie details:', error);
         // Handle the error as needed

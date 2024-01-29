@@ -14,6 +14,7 @@ import PercentageCircular from '../components/UI/PercentageCircular';
 import { QUERY_MOVIEDETAIL } from '../utils/queries';
 import Provider from '../components/UI/Provider';
 import { useFavoriteMovies } from '../utils/FavoriteMoviesContext';
+import Auth from '../utils/auth';
 
 
 export default function MovieDetail() {
@@ -48,15 +49,20 @@ export default function MovieDetail() {
 	const imageUrl = movie.poster_path?`https://image.tmdb.org/t/p/w500/${movie.poster_path}`:`/No_image_available.png`;
 
 	const toggleFav = async () => {
-		if (isFav(movie.id)) {
-			console.log("remove")
-			const success = await removeFavoriteMovie(movie.id);
-			if (success) setfavBtnColor('');
+		if (Auth.loggedIn()) {
+			if (isFav(movie.id)) {
+				console.log("remove")
+				const success = await removeFavoriteMovie(movie.id);
+				if (success) setfavBtnColor('');
+			} else {
+				console.log("add")
+				const success = await addFavoriteMovie(movie.id);
+				if (success) setfavBtnColor('#98002e');
+			}
 		} else {
-			console.log("add")
-			const success = await addFavoriteMovie(movie.id);
-			if (success) setfavBtnColor('#98002e');
+			alert("Login first.");
 		}
+		
 	};
 
 	//return a temp output, will edit it later
