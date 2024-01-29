@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import HomePhoto from '../images/homephoto.jpg';
 import CompanyLogo from '../images/purpleturtle.png';
+import SearchForm from '../components/SearchForm';
 
 const Home = () => {
   return (
@@ -55,34 +56,7 @@ Additionally, you have the convenience of adding movies directly to your watchli
           </Box>
 
           {/* Search Bar Section */}
-          <Box mt={2} sx={{ width: '100%', textAlign: 'left' }}>
-            <Typography variant="h5" gutterBottom>
-              Search for Movies
-            </Typography>
-            <TextField
-              variant="outlined"
-              placeholder="Search..."
-              fullWidth
-              sx={{ marginBottom: '20px' }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              style={{
-                backgroundColor: 'black',
-                color: 'white',
-                opacity: '0.8',
-                transition: 'opacity 0.3s',
-              }}
-              sx={{
-                '&:hover': {
-                  opacity: '1',
-                },
-              }}
-            >
-              Search
-            </Button>
-          </Box>
+          <SearchForm />
         </Box>
 
         {/* Right Image Section (Hide on small screens) */}

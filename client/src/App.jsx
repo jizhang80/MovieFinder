@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Nav from './components/NavTabs';
 import Footer from './components/Footer';
 import { setContext } from '@apollo/client/link/context';
+import FavoriteMoviesProvider from './utils/FavoriteMoviesContext';
 
 import {
   ApolloClient,
@@ -33,6 +34,7 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
+      <FavoriteMoviesProvider>
       <Nav />
       
       {/* Use a wrapper div with margin for Outlet */}
@@ -41,6 +43,7 @@ const App = () => {
       </div>
       
       <Footer />
+      </FavoriteMoviesProvider>
     </ApolloProvider>
   );
 }

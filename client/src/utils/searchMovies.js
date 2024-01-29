@@ -16,8 +16,14 @@ export default async function searchMovie(keywords) {
 		const searchResults = await response.json();
 		
 		if (!searchResults) return movies;
-
-		movies.push(...searchResults.results);
+		for (let m of searchResults.results) {
+			const idStr = m.id.toString();
+			const movie = {
+				...m,
+				id: idStr
+			}
+			movies.push(movie);
+		}
 
 		// let total_pages = searchResults.total_pages;
 		// if (searchResults.total_pages > 5) {

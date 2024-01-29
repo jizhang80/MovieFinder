@@ -1,5 +1,7 @@
 // get movie detail from TMDB API by movieId
 require('dotenv').config()
+const convertMovieIdToStr = require('./convertMovieIdToStr');
+
 const fetch = require('node-fetch');
 const options = {
   method: 'GET',
@@ -15,7 +17,9 @@ module.exports = async function getMovieDetailFromAPI(movieId) {
         const response = await fetch(url, options);
         //need response check here, later
         const movie = await response.json();
-        return movie;
+        const movieConverted = convertMovieIdToStr(movie);
+        console.log(typeof(movieConverted.id));
+        return movieConverted;
     } catch (error) {
     console.error('Error fetching movie IDs:', error);
     // Handle the error as needed

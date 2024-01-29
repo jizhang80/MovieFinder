@@ -110,9 +110,6 @@ const ButtonAppBar = () => {
           <ListItem button onClick={() => handleDrawerItemClick('/saved')}>
             <ListItemText primary="WatchList" />
           </ListItem>
-          <ListItem button onClick={() => handleDrawerItemClick('/search')}>
-            <ListItemText primary="TempSearchPage" />
-          </ListItem>
         </List>
       </Drawer>
 

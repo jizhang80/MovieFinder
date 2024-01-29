@@ -12,12 +12,12 @@ const typeDefs = `
     username: String
     email: String
     password: String
-    favorite_movies: [Movie]!
+    favorite_movies: [String]
   }
 
   type Movie {
     _id: ID!
-    id: Int!
+    id: String!
     imdb_id: String!
     release_date: String
     title: String
@@ -41,7 +41,9 @@ const typeDefs = `
 
   type movieResponse {
     success: Boolean
-    movie: Movie
+    message: String
+    user: User
+    movieId: String
   }
 
   type Auth {
@@ -51,9 +53,11 @@ const typeDefs = `
 
   type Query {
     users: [User]
-    user(username: String): User 
+    user(userId: String!): User 
     movies: [Movie]!
     movie(id: String!): Movie
+    favMovies: [String]
+    favMoviesDetail: [Movie]
     searchMovies( keyword: String!): [Movie]
     providers: [Provider]
     provider(providerId: String!): Provider
@@ -63,9 +67,10 @@ const typeDefs = `
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addMovie(id: Int!): Movie
+    addMovie(id: String!): Movie
     removeMovie(_id: ID!): Movie
-    editMovie(_id: ID!): User
+    addFavMovie(id: String!): movieResponse
+    removeFavMovie(id: String!): movieResponse
   }
 `;
 

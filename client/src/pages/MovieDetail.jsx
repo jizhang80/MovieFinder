@@ -1,6 +1,7 @@
 //movie detial information here
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import {useEffect, useState} from 'react';
 
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
@@ -12,6 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PercentageCircular from '../components/UI/PercentageCircular';
 import { QUERY_MOVIEDETAIL } from '../utils/queries';
 import Provider from '../components/UI/Provider';
+import { useFavoriteMovies } from '../utils/FavoriteMoviesContext';
 
 
 export default function MovieDetail() {
@@ -22,6 +24,15 @@ export default function MovieDetail() {
 	});
 	
 	const movie = data?.movie || {};
+
+	const { isFav, addFavoriteMovie, removeFavoriteMovie } = useFavoriteMovies();
+	const [favBtnColor, setfavBtnColor] = useState(isFav(movie.id) ? '#98002e' : '');
+
+	useEffect(() => {
+		if (data) {
+			setfavBtnColor(isFav(data.movie.id) ? '#98002e' : '');
+		}
+	}, [data, isFav]);
 	
 	if (loading) {
 		return (
@@ -34,7 +45,19 @@ export default function MovieDetail() {
 
 	if (error) console.log(JSON.stringify(error, null, 2));
 
-	const imageUrl = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+	const imageUrl = movie.poster_path?`https://image.tmdb.org/t/p/w500/${movie.poster_path}`:`/No_image_available.png`;
+
+	const toggleFav = async () => {
+		if (isFav(movie.id)) {
+			console.log("remove")
+			const success = await removeFavoriteMovie(movie.id);
+			if (success) setfavBtnColor('');
+		} else {
+			console.log("add")
+			const success = await addFavoriteMovie(movie.id);
+			if (success) setfavBtnColor('#98002e');
+		}
+	};
 
 	//return a temp output, will edit it later
 	return (
@@ -61,8 +84,8 @@ export default function MovieDetail() {
 						<Typography variant="h6">Overview</Typography>
 						<Typography>{movie.overview}</Typography>
 						<Box>
-							<IconButton aria-label="add to favorites">
-								<FavoriteIcon />
+							<IconButton aria-label="add to favorites" onClick={toggleFav}>
+								<FavoriteIcon sx={{color:favBtnColor}}/>
 							</IconButton>
 						</Box>
 						<Box>

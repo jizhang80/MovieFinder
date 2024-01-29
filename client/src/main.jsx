@@ -8,7 +8,6 @@ import ModalsContainer from './components/ModalsContainer.jsx';
 
 import Error from './pages/Error.jsx';
 import App from './App.jsx';
-import TempSearchPage from './pages/TempSearchPage.jsx';
 import MovieSearchResult from './pages/MovieSearchResult';
 import MovieDetail from './pages/MovieDetail.jsx';
 
@@ -43,14 +42,6 @@ const router = createBrowserRouter([
           element: (
             <ThemeProvider theme={theme}>
               <WatchList />
-            </ThemeProvider>
-          ),
-        },
-        {
-          path: '/search',
-          element: (
-            <ThemeProvider theme={theme}>
-              <TempSearchPage />
             </ThemeProvider>
           ),
         },

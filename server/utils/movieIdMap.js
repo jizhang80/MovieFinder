@@ -6,7 +6,7 @@ async function initializeMovieIdMap() {
   try {
     const movies = await Movie.find({}, 'id'); // 'id' is the field representing movie ID
     movies.forEach((movie) => {
-      movieIdMap.set(movie.id.toString(), true);
+      movieIdMap.set(movie.id, true);
     });
     console.log('init movieIdMap...done');
   } catch (error) {
@@ -16,7 +16,7 @@ async function initializeMovieIdMap() {
 
 //update movieIdMap
 async function updateMovieIdMap(movieId) {
-  movieIdMap.set(movieId.toString(), true);
+  movieIdMap.set(movieId, true);
   console.log('update movieIdMap success')
 }
 

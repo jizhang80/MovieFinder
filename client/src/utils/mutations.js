@@ -27,11 +27,52 @@ export const LOGIN_USER = gql`
   }
 `;
 
-export const EDIT_MOVIE = gql`
-  mutation EditMovie($movieId: ID!) {
-    editMovie(movieId: $movieId) {
+const MovieFragment = gql`
+  fragment MovieDetails on Movie {
+    _id
+    id
+    imdb_id
+    title
+    genres {
       _id
-      favorite_movies
+      id
+      name
+    }
+    homepage
+    overview
+    poster_path
+    vote_average
+  }
+`;
+
+export const ADD_FAV_MOVIE = gql`
+  mutation addFavMovie($movieId: String!) {
+    addFavMovie(id: $movieId) {
+        success
+        message
+        user {
+          _id
+          username
+          email
+          favorite_movies
+        }
+        movieId
+    }
+  }
+`;
+
+export const REMOVE_FAV_MOVIE = gql`
+  mutation removeFavMovie($movieId: String!) {
+    removeFavMovie(id: $movieId) {
+        success
+        message
+        user {
+          _id
+          username
+          email
+          favorite_movies
+        }
+        movieId
     }
   }
 `;
