@@ -27,7 +27,9 @@ export default function MovieSearchResult() {
 		}
 	}, [keyword]);
 
-
+	if (movies.length < 1) {
+		return (<p>No movies search result</p>);
+	}
 
 	return (
 		<div className='aos-init aos-animate'>
