@@ -15,7 +15,7 @@ export default async function getStreamingInfo(movieId) {
     const response = await fetch(url, options);
     const searchResults = await response.json();
     
-    if (!searchResults) return providers;
+    if (!response.ok) return providers;
 
     providers.push(...searchResults.results.CA.flatrate);
 

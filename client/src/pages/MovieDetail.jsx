@@ -96,7 +96,7 @@ export default function MovieDetail() {
 						</Box>
 						<Box>
 							<Typography variant="h6">Now Streaming at</Typography>
-							{movie.providers.map((provider) => <Provider providerLogo={provider.logo_path} key={provider.provider_id} />)}
+							{movie.providers && movie.providers.map((provider) => <Provider providerLogo={provider.logo_path} key={provider.provider_id} />)}
 						</Box>
 					</Stack>
 				</Stack>
