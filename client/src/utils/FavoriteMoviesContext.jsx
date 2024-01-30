@@ -28,6 +28,7 @@ export default function FavoriteMoviesProvider ({ children }) {
   const addFavoriteMovie = async (movie) => {
     setFavoriteMovies((prevMovies) => [...prevMovies, movie]);
     try {
+        console.log(movie);
         await addFavoriteMovieMutation({
         variables: { movieId: movie.id },
 
