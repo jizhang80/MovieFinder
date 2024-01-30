@@ -64,8 +64,33 @@ export default function MovieDetail() {
 			}}
 		>
 			<Stack spacing={2}>
-				<Stack direction="row" spacing={2}>
-					<img width="300" src={imageUrl} />
+				<Stack 
+				direction="row" 
+				spacing={2}
+				sx={{
+			          display: 'flex',
+			          justifyContent: 'space-between',
+			          alignItems: 'center',
+			          flexWrap: 'wrap', // Allow items to wrap to the next line
+			        }}
+				>
+					<Box
+					sx={{
+			            flex: '1',
+			            marginRight: '20px',
+			            minWidth: '300px',
+			            width: { xs: '100%', sm: '50%' }, 
+			          }}
+					>
+					<img style={{ width: '80%', marginBottom: '10px' }} src={imageUrl} />
+					</Box>
+					<Box
+						sx={{
+				            flex: '2',
+				            width: { xs: '100%', sm: '50%' }, 
+				            display: { xs: '100%', sm: 'block' }, 
+				          }}
+					>
 					<Stack spacing={2} textAlign={'left'}>
 						<Typography variant="h5" gutterBottom>{movie.title}</Typography>
 						<Stack direction="row" spacing={2}>
@@ -89,6 +114,7 @@ export default function MovieDetail() {
 							{movie.providers && movie.providers.map((provider) => <Provider providerLogo={provider.logo_path} key={provider.provider_id} />)}
 						</Box>
 					</Stack>
+					</Box>
 				</Stack>
 			</Stack>
 		</Box>
