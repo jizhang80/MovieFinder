@@ -31,7 +31,7 @@ export default function MovieDetail() {
 
 	useEffect(() => {
 		if (data) {
-			setfavBtnColor(isFav(data.movie.id) ? '#98002e' : '');
+			setfavBtnColor(isFav(data.movie) ? '#98002e' : '');
 		}
 	}, [data, isFav]);
 	
@@ -95,7 +95,7 @@ export default function MovieDetail() {
 							</IconButton>
 						</Box>
 						<Box>
-							<Typography variant="h6">Now Streaming at</Typography>
+							<Typography variant="h6">Now Streaming</Typography>
 							{movie.providers && movie.providers.map((provider) => <Provider providerLogo={provider.logo_path} key={provider.provider_id} />)}
 						</Box>
 					</Stack>
