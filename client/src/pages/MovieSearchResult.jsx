@@ -27,6 +27,8 @@ export default function MovieSearchResult() {
 		}
 	}, [keyword]);
 
+
+
 	return (
 		<div className='aos-init aos-animate'>
 			<div className="m-5" data-aos="fade-up" data-aos-delay="200">

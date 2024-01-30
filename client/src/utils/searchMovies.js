@@ -14,12 +14,12 @@ export default async function searchMovie(keywords) {
 	try {
 		const response = await fetch(url, options);
 		const searchResults = await response.json();
-		console.log(response)
 		if (response.ok){
 			for (let m of searchResults.results) {
 				const idStr = m.id.toString();
 				const movie = {
 					...m,
+					__typename: "Movie",
 					id: idStr
 				}
 				movies.push(movie);

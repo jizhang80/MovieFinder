@@ -10,28 +10,23 @@ const FavoriteMoviesContext = createContext();
 
 export default function FavoriteMoviesProvider ({ children }) {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
-  
   const [addFavoriteMovieMutation, {error_add_fav, data_addfav}] = useMutation(ADD_FAV_MOVIE); 
   const [removeFavoriteMovieMutation, {error_rmv_fav, data_rmvfav}] = useMutation(REMOVE_FAV_MOVIE); 
-
-  
 
   if (Auth.loggedIn()) {
     const { data, loading, error } = useQuery(QUERY_FAV_MOVIES_DETAIL); 
     if (error) console.log(JSON.stringify(error, null, 2));
     
     useEffect(() => {
-      if(data) {
+      if(data && !loading) {
         setFavoriteMovies(data.favMoviesDetail); 
       }
-    }, [data]);
+    }, [data, loading]);
   }
-  
+
 
   const addFavoriteMovie = async (movie) => {
-
     setFavoriteMovies((prevMovies) => [...prevMovies, movie]);
-    console.log(favoriteMovies);
     try {
         await addFavoriteMovieMutation({
         variables: { movieId: movie.id },
@@ -41,7 +36,6 @@ export default function FavoriteMoviesProvider ({ children }) {
           const currentData = cache.readQuery({ 
             query: QUERY_FAV_MOVIES_DETAIL
           });
-          console.log("Before writeQuery:", currentData);
           const updatedData = {
             favMoviesDetail: [...currentData.favMoviesDetail, movie],
           };
@@ -49,7 +43,6 @@ export default function FavoriteMoviesProvider ({ children }) {
             query: QUERY_FAV_MOVIES_DETAIL,
             data: updatedData,
           });
-          console.log("After writeQuery:", updatedData);
         },
       });
       return true;
@@ -68,7 +61,6 @@ export default function FavoriteMoviesProvider ({ children }) {
         variables: { movieId: movie.id },
         update: (cache) => {
           const existingData = cache.readQuery({ query: QUERY_FAV_MOVIES_DETAIL });
-          console.log("Before writeQuery:", existingData);
           const updatedData = {
             favMoviesDetail: existingData.favMoviesDetail.filter((m) => m.id !== movie.id),
           };
@@ -76,7 +68,6 @@ export default function FavoriteMoviesProvider ({ children }) {
             query: QUERY_FAV_MOVIES_DETAIL,
             data: updatedData,
           });
-          console.log("After writeQuery:", updatedData);
         },
       });
       return true;

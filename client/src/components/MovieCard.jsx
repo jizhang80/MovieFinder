@@ -15,31 +15,25 @@ import Auth from '../utils/auth';
 import { useFavoriteMovies } from '../utils/FavoriteMoviesContext';
 
 export default function MovieCard({movie}) {
+  const [isFav, setIsFav] = useState(false);
+
   // about movie image, please ref: https://developer.themoviedb.org/docs/image-basics
   const imageUrl = movie.poster_path?`https://image.tmdb.org/t/p/w500/${movie.poster_path}`:`/No_image_available.png`;
-  const { isFav, addFavoriteMovie, removeFavoriteMovie } = useFavoriteMovies();
-  const [favBtnColor, setfavBtnColor] = useState(isFav(movie) ? '#98002e' : '');
+  const { favoriteMovies, addFavoriteMovie, removeFavoriteMovie } = useFavoriteMovies();
 
   useEffect(() => {
-    setfavBtnColor(isFav(movie) ? '#98002e' : '');
-  }, [movie, isFav]);
+    // console.log("MovieCard",favoriteMovies, movie);
+    setIsFav(favoriteMovies.some((m)=> m.id === movie.id));
+  }, [favoriteMovies, movie]);
 
-  const toggleFav = async () => {
+  const onToggleFav = async (movie) => {
     if (Auth.loggedIn()) {
-      if (isFav(movie)) {
-        console.log("remove")
-        const success = await removeFavoriteMovie(movie);
-        if (success) setfavBtnColor('');
-      } else {
-        console.log("add")
-        const success = await addFavoriteMovie(movie);
-        if (success) setfavBtnColor('#98002e');
-      }
+      isFav? await removeFavoriteMovie(movie): await addFavoriteMovie(movie);
+      setIsFav(!isFav);
     } else {
-      alert("login first!");
+      alert("Please Login first!");
     }
-    
-  };
+  }
 
   return (
     <Stack sx={{ margin:2}}>
@@ -58,8 +52,8 @@ export default function MovieCard({movie}) {
           </CardContent>
           </Link>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites" onClick={toggleFav}>
-              <FavoriteIcon sx={{color:favBtnColor}}/>
+            <IconButton aria-label="add to favorites" onClick={()=>onToggleFav(movie)}>
+              <FavoriteIcon sx={{color: isFav? '#98002e' : ''}}/>
             </IconButton>
           </CardActions>
         </Card>

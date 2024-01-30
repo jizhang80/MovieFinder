@@ -18,23 +18,21 @@ import Auth from '../utils/auth';
 
 
 export default function MovieDetail() {
+	const [isFav, setIsFav] = useState(false);
+	const { favoriteMovies, addFavoriteMovie, removeFavoriteMovie } = useFavoriteMovies();
 	//get movie data by GraphQL
 	const { movieId } = useParams();
 	const { loading, error, data } = useQuery(QUERY_MOVIEDETAIL, {
 		variables: {movieId: movieId}
 	});
+
+	useEffect(() => {
+    // console.log("MovieCard",favoriteMovies, movie);
+    setIsFav(favoriteMovies.some((m)=> m.id === movieId));
+  }, [favoriteMovies, movieId]);
 	
 	const movie = data?.movie || {};
 
-	const { isFav, addFavoriteMovie, removeFavoriteMovie } = useFavoriteMovies();
-	const [favBtnColor, setfavBtnColor] = useState(isFav(movie) ? '#98002e' : '');
-
-	useEffect(() => {
-		if (data) {
-			setfavBtnColor(isFav(data.movie) ? '#98002e' : '');
-		}
-	}, [data, isFav]);
-	
 	if (loading) {
 		return (
 		<Box sx={{ display: 'flex' }}>
@@ -48,22 +46,14 @@ export default function MovieDetail() {
 
 	const imageUrl = movie.poster_path?`https://image.tmdb.org/t/p/w500/${movie.poster_path}`:`/No_image_available.png`;
 
-	const toggleFav = async () => {
+	const onToggleFav = async (movie) => {
 		if (Auth.loggedIn()) {
-			if (isFav(movie)) {
-				console.log("remove")
-				const success = await removeFavoriteMovie(movie);
-				if (success) setfavBtnColor('');
-			} else {
-				console.log("add")
-				const success = await addFavoriteMovie(movie);
-				if (success) setfavBtnColor('#98002e');
-			}
+			isFav? await removeFavoriteMovie(movie): await addFavoriteMovie(movie);
+			setIsFav(!isFav);
 		} else {
-			alert("login first!");
+			alert("Please Login first!");
 		}
-		
-	};
+	} 
 
 	//return a temp output, will edit it later
 	return (
@@ -90,8 +80,8 @@ export default function MovieDetail() {
 						<Typography variant="h6">Overview</Typography>
 						<Typography>{movie.overview}</Typography>
 						<Box>
-							<IconButton aria-label="add to favorites" onClick={toggleFav}>
-								<FavoriteIcon sx={{color:favBtnColor}}/>
+							<IconButton aria-label="add to favorites" onClick={()=>onToggleFav(movie)}>
+								<FavoriteIcon sx={{color: isFav? '#98002e' : ''}}/>
 							</IconButton>
 						</Box>
 						<Box>

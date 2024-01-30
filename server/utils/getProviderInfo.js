@@ -19,8 +19,10 @@ module.exports = async function getProvidersInfo(movieId) {
     
     if (!response.ok) return providers;
 
-    providers.push(...searchResults.results.CA.flatrate);
-
+    if (searchResults.results.CA.flatrate) {
+      providers.push(...searchResults.results.CA.flatrate);
+    }
+    
     return providers;
   } catch (error) {
     console.error('Error fetching movie IDs:', error);
