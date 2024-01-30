@@ -27,7 +27,7 @@ export default function MovieDetail() {
 	const movie = data?.movie || {};
 
 	const { isFav, addFavoriteMovie, removeFavoriteMovie } = useFavoriteMovies();
-	const [favBtnColor, setfavBtnColor] = useState(isFav(movie.id) ? '#98002e' : '');
+	const [favBtnColor, setfavBtnColor] = useState(isFav(movie) ? '#98002e' : '');
 
 	useEffect(() => {
 		if (data) {
