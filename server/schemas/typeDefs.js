@@ -18,7 +18,7 @@ const typeDefs = `
   type Movie {
     _id: ID!
     id: String!
-    imdb_id: String!
+    imdb_id: String
     release_date: String
     title: String
     genres: [Genres]
