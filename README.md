@@ -11,4 +11,4 @@ AS A movie lover with a busy schedule I WANT to find the movie of my choice and 
 
 
 ## Deployed URL
-
+https://tpurpleturtle-93a75b326d26.herokuapp.com/
